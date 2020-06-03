@@ -19,7 +19,11 @@ function create_client($data) {
             $data,
             array('%s','%d')
         );
-        return false;
+        if($create) {
+            return false;
+        } else {
+            return 'error';
+        }
     } else {
         return 'mail';
     }
