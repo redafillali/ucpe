@@ -2,12 +2,20 @@
 /*
  * Page de connexion
  */
-get_header(); ?>
+
+// Always start this first
+session_start();
+if($_POST) {
+    connexion($_POST['email'], $_POST['password']);
+}
+if(isset( $_SESSION['user_id'] ) && !empty($_SESSION['user_id'])) :
+        wp_redirect(get_bloginfo('url').'/?page=family&type=details');
+    else:
+    get_header(); ?>
     <form method="post" class="row col-sm-12">
         <div class="form-group col-md-6">
             <label for="email">Email :</label>
             <input id="email" class="form-control" type="email" name="email" required />
-            <small id="emailError" class="form-text <?php if($_GET['error'] == 'mail') echo 'show'; ?>">Désolé, cette adresse mail à déjà été utilisée</small>
         </div>
         <div class="form-group col-md-6">
             <label for="password">Mot de passe :</label>
@@ -17,5 +25,7 @@ get_header(); ?>
             <button class="form-control btn btn-primary" type="submit">Envoyer</button>
         </div>
     </form>
-<?php get_footer(); ?>
-<?php get_footer();
+<?php
+    get_footer();
+    endif;
+?>
