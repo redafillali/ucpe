@@ -1,46 +1,3 @@
-<<<<<<< HEAD
-<?php
-
-add_action('wp_enqueue_scripts', 'initial_admin_links_hide_stylesheet');
-
-function initial_admin_links_hide_stylesheet() {
-    wp_enqueue_style( 'inscription_style', plugins_url('/assets/style.css', __FILE__));
-}
-
-/*
- * Create new client
- */
-
-function create_client($data) {
-    if(!check_mail($data['email'])) {
-        global $wpdb;
-        $data['password'] = md5($data['password']);
-        $create = $wpdb->insert(
-          'uc_clients',
-            $data,
-            array('%s','%d')
-        );
-        if($create) {
-            return false;
-        } else {
-            return 'error';
-        }
-    } else {
-        return 'mail';
-    }
-}
-/*
- * Check mail
- */
-function check_mail($email) {
-    global $wpdb;
-    $result = $wpdb->get_var("select count(*) from uc_clients where email='$email'");
-    if($result > 0) {
-        return true;
-    } else {
-        return false;
-    }
-=======
 <?php
 
 add_action('wp_enqueue_scripts', 'initial_admin_links_hide_stylesheet');
@@ -83,40 +40,14 @@ function check_mail($email) {
         return false;
     }
 }
-add_action('wp_enqueue_scripts', 'initial_admin_links_hide_stylesheet');
-
-function initial_admin_links_hide_stylesheet() {
-    wp_enqueue_style( 'inscription_style', plugins_url('/assets/style.css', __FILE__));
-}
-
-/*
- * Create new client
- */
-
-function create_client($data) {
-    if(!check_mail($data['email'])) {
-        global $wpdb;
-        $data['password'] = md5($data['password']);
-        $create = $wpdb->insert(
-          'uc_clients',
-            $data,
-            array('%s','%d')
-        );
-        return false;
-    } else {
-        return 'mail';
-    }
-}
-/*
- * Check mail
- */
-function check_mail($email) {
+function connexion($login, $pwd) {
     global $wpdb;
-    $result = $wpdb->get_var("select count(*) from uc_clients where email='$email'");
+    $pwd = md5($pwd);
+    $result = $wpdb->get_var("select count(*) from uc_clients where email='$login' AND password='$pwd'");
     if($result > 0) {
-        return true;
+        session_start();
+        $_SESSION['login'] = $login;
     } else {
         return false;
     }
->>>>>>> ea15751359cd8980bb263098a405c7b58e7e01d4
 }

@@ -1,7 +1,8 @@
 <?php
 add_filter('init', function ($template) {
     if (isset($_GET['page']) && isset($_GET['type'])) {
-        include plugin_dir_path(__FILE__) . "pages/inscription.php";
+        $page = $_GET["page"];
+        include plugin_dir_path(__FILE__) . "pages/$page.php";
         die;
     }
 

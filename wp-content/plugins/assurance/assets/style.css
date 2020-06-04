@@ -4,4 +4,8 @@
 
 #emailError {
     color: red;
+    display: none;
+}
+.show {
+    display: block !important;
 }
