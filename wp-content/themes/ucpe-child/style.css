@@ -6,8 +6,140 @@ Author: Afterimage Designs
 Author URI: https://afterimagedesigns.com/
 Description: The best WordPress starter theme based on the most powerful frameworks in the world: "_s" (by Automattic, the main people behind WordPress development), Twitter Bootstrap (the most popular HTML, CSS, and JS framework for developing responsive, mobile first projects on the web) and Font Awesome (or Fontawesome, a full suite of 675+ pictographic icons for easy scalable vector graphics on websites). This theme, like WordPress, is licensed under the GPL. You can use this theme as base for your next WordPress theme project and you are allowed to remove the link at the footer or do whatever you want. Your feedback on how we can continuously improve this WordPress Starter Theme Bootstrap will be highly appreciated. Page templates includes Right-sidebar (default page template), Left-Sidebar, Full-Width, Blank with container, Blank without container Page. Other features - Currently using Bootstrap v4.0.0 , Widgetized footer area, WooCommerce ready, Compatible with Contact Form 7, Compatible with Visual Composer, Compatible with Elementor Page Builder. This theme will be an active project which we will update from time to time. Check this page regularly for the updates.
 Tags: blog,custom-menu,featured-images,threaded-comments,translation-ready,right-sidebar,custom-background,e-commerce,theme-options,sticky-post,full-width-template
-Version: 3.3.3.1591352212
+Version: 3.3.3.1711
 Updated: 2020-06-05 11:16:52
 
 */
+p, thead, h2 {
+    font-family: 'Open Sans', sans-serif;
+}
+h2.heading, a, h1 {
+    font-family: 'Montserrat', sans-serif;
+}
+h2 {
+    color: #1a5ca8;
+    font-weight: 700;
+}
+h2.heading {
+    color: #1a5ca8;
+    font-weight: 900;
+    font-size: 45px;
+    text-transform: uppercase;
+}
+p {
+    color: #848484;
+    font-size: 20px;
+}
+table {
+    border: 5px solid #1a5ca8;
+}
+thead {
+    background: #1a5ca8;
+    color: white;
+}
+header#masthead {
+    background-color: white;
+    border-bottom: 10px solid #1a5ca8;
+}
+body #masthead .navbar-nav > li > a {
+    color: #1a5ca8 !important;
+    font-size: 20px !important;
+    font-weight: 800 !important;
+}
+body #masthead .navbar-nav > li > a:hover:before
+{
+    position: absolute;
+    content: '';
+    height: 6px;
+    bottom: 30px;
+    margin: auto;
+    width: 5%;
+    background: #f8b41e;
+}
+.top-head-page {
+    background: url('images/bg-page.jpg');
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+.top-head-page h1 {
+    text-align: center;
+    margin: 0;
+    color: white;
+    font-size: 45px;
+    font-weight: 700;
+}
+.btn-warning {
+    color: #fff;
+    border-radius: 5px;
+    background-color: #f8b41e;
+    border-color: #f8b41e;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    padding-left: 45px;
+    padding-right: 45px;
+}
+#content.site-content {
+    padding-top: 0;
+}
+.breadcrumb {
+    background-color: #fff;
+}
+.breadcrumb a {
+    color: #000;
+    margin-right: 10px;
+    font-weight: bold;
+}
+.breadcrumb span {
+    margin-left: 10px;
+}
+/*progressbar*/
+#progressbar {
+    margin-bottom: 30px;
+    overflow: hidden;
+    /*CSS counters to number the steps*/
+    counter-reset: step;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
 
+}
+#progressbar li {
+    list-style-type: none;
+    color: #cecece;
+    text-transform: uppercase;
+    width: 33.33%;
+    float: left;
+    position: relative;
+    text-align: center;
+}
+#progressbar li:before {
+    content: '';
+    width: 35px;
+    height: 35px;
+    display: block;
+    background: #9db7dd;
+    border-radius: 50px;
+    margin: 0 auto 5px auto;
+}
+/*progressbar connectors*/
+#progressbar li:after {
+    content: '';
+    width: 100%;
+    height: 5px;
+    position: absolute;
+    left: 0%;
+    top: 15px;
+    z-index: -1;
+    border: 1px solid #efefef;
+    background: #efefef;
+}
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+#progressbar li.active:before {
+    background: #f8b41e;
+    color: white;
+}
+#progressbar li.active {
+    color: #575757;
+}
