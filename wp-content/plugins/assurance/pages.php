@@ -1,6 +1,6 @@
 <?php
 add_filter('init', function ($template) {
-    if (isset($_GET['page']) && isset($_GET['details'])) {
+    if (isset($_GET['page']) && $_GET['page'] == "ajax.data") {
         $page = $_GET["page"];
         include plugin_dir_path(__FILE__) . "pages/$page.php";
         die;
@@ -96,6 +96,7 @@ class PageTemplater
             'pages/family.php' => 'Page famille',
             'pages/connexion.php' => 'Page connexion',
             'pages/recap.php' => 'Page recap',
+            'pages/paiement.php' => 'Page Paiement',
         );
 
     }

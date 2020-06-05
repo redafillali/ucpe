@@ -2,6 +2,8 @@
 /*
   * Template neme: Inscription parent
   */
+session_start();
+session_destroy();
 if($_POST)  {
     $error = create_client($_POST);
 }

@@ -125,7 +125,6 @@ function create_adhesion($data) {
         $data,
         array('%s')
     );
-    if($create) wp_redirect(bloginfo('url').'/?page=recap&type=details');
 }
 function create_commande($parent_id) {
     if(!check_commande($parent_id)) {
@@ -136,22 +135,23 @@ function create_commande($parent_id) {
                 'parent_id' => $parent_id,
             )
         );
-        $wpdb->print_error();
-        $wpdb->show_errors();
         if ($create) {
             $id = $wpdb->insert_id;
-            $numero = str_pad($id, 6, "0", STR_PAD_LEFT);;
+            $numero = str_pad(intval($id), 6, "0", STR_PAD_LEFT);;
             $update = $wpdb->update(
                 'uc_commande',
                 array('numero' => $numero),
                 array('ID'=> $id),
                 array('%d')
             );
-            $wpdb->print_error();
-            $wpdb->show_errors();
             if ($update) wp_redirect(get_bloginfo('url') . '/recap/');
         }
     }
+}
+function get_commande($parent_id) {
+    global $wpdb;
+    $commande = $wpdb->get_row("select * from uc_commande where parent_id='$parent_id'");
+    return $commande;
 }
 function check_commande($parent_id)
 {
@@ -174,4 +174,14 @@ function get_recap_data($parent_id) {
         'adhesion' => $adhesion
     );
     return $data;
+}
+function update_commande($numero, $etat) {
+    global $wpdb;
+    $update = $wpdb->update(
+        'uc_commande',
+        array('etat' => $etat),
+        array('numero'=> $numero),
+        array('%d')
+    );
+    return $update;
 }
