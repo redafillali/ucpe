@@ -17,20 +17,23 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
                 'type_assur' => $_POST['type_assur'],
             );
             create_enfant($data);
-        }
-        if(isset($_POST['nom_pere'])) {
+        };
+        if (isset($_POST['nom_pere'])) {
             $data = array(
-                'family_id' =>  $_SESSION['user_id'],
-                'nom_pere' =>  $_POST['nom_pere'],
-                'nom_mere' =>  $_POST['nom_mere'],
-                'tel_mere' =>  $_POST['tel_mere'],
-                'tel_pere' =>  $_POST['tel_pere'],
-                'mail_pere' =>  $_POST['email_pere'],
-                'mail_mere' =>  $_POST['email_mere'],
-                'delegue' =>  $_POST['delegue'],
-                'montant' =>  $_POST['montant_adh'],
+                'family_id' => $_SESSION['user_id'],
+                'nom_pere' => $_POST['nom_pere'],
+                'nom_mere' => $_POST['nom_mere'],
+                'tel_mere' => $_POST['tel_mere'],
+                'tel_pere' => $_POST['tel_pere'],
+                'mail_pere' => $_POST['email_pere'],
+                'mail_mere' => $_POST['email_mere'],
+                'delegue' => $_POST['delegue'],
+                'montant' => $_POST['montant_adh'],
             );
             create_adhesion($data);
+            create_commande($_SESSION['user_id']);
+        } else {
+            create_commande($_SESSION['user_id']);
         }
     endif;
     if ($_GET) :
@@ -39,33 +42,36 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
         }
     endif;
     get_header(); ?>
-    <div class="col-md-12 row">
-        <div class="col-md-12">
-            <h1>Details du parent :</h1>
-        </div>
+    <div class="row col-md-12">
+        <ul id="progressbar">
+            <li>Création du compte</li>
+            <li class="active">Informations sur les enfants & adhésion</li>
+            <li>Confirmation & Paiement</li>
+        </ul>
+    </div>
+    <h2>1 - Renseignements concernant le Parent :</h2>
+    <div class="col-md-12 row parent_info">
         <?php
         $parent = get_client_by_ID($_SESSION['user_id']);
         ?>
         <div class="col-md-6">
-            Nom : <?php echo $parent->nom ?>
+            Nom et prénom du parent : <b><?php echo $parent->nom ?></b>
         </div>
         <div class="col-md-6">
-            Téléphone : <?php echo $parent->tel ?>
+            Téléphone du parent : <b><?php echo $parent->tel ?></b>
         </div>
         <div class="col-md-12">
-            Email : <?php echo $parent->email ?>
+            Adresse mail du parent : <b><?php echo $parent->email ?></b>
         </div>
     </div>
+    <h2>2 - Renseignements de(s) enfant(s) :</h2>
     <div class="col-md-12 row" id="enfants">
-        <div class="col-md-12">
-            <h1>Informations enfants :</h1>
-        </div>
         <?php
         $enfants = get_enfants($_SESSION['user_id']);
         $i = 0;
         if ($enfants) :
             ?>
-            <table class="table table-striped">
+            <table class="table table-striped enfants">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -92,8 +98,8 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
                             echo $assurance->assurance . " - " . $assurance->prix . "DH";
                             $montant_total += $assurance->prix; ?></td>
                         <td>
-                            <a class="btn btn-primary"
-                               href="?page=family&type=details&action=delete&child=<?php echo $enfant->ID ?>">
+                            <a class=""
+                               href="<?php the_permalink(); ?>?action=delete&child=<?php echo $enfant->ID ?>">
                                 <svg class="bi bi-x-square" width="1em" height="1em" viewBox="0 0 16 16"
                                      fill="currentColor"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -108,19 +114,19 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
                         </td>
                     </tr>
                 <?php endforeach; ?>
+                </tbody>
+                <tfoot style="background-color: #f1f1f1; font-weight: 700;">
                 <tr>
-                    <th scope="row"></th>
                     <td></td>
-                    <td></td>
-                    <td align="right">Sous-total</td>
+                    <td colspan="3">Montant total</td>
                     <td><?php echo $montant_total . " DH"; ?></td>
                     <td></td>
                 </tr>
-                </tbody>
+                </tfoot>
             </table>
         <?php endif; ?>
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ajouterenfant">
+        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#ajouterenfant" style="margin-left: 0">
             Ajouter un enfant
         </button>
         <!-- Modal -->
@@ -197,16 +203,16 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
             </div>
         </div>
     </div>
+    <h2>3 - Adhésion :</h2>
     <div class="col-md-12 row">
-        <h1>Adhésion :</h1>
         <div class="col-md-12">
-            <p>Souhaitez-vous adhérer à l'UCPE <input class="" type="radio" name="adherer"
+            <p style="color:#f8b41e; font-weight: 700;">Souhaitez-vous adhérer à l'UCPE <input class="" type="radio" name="adherer"
                                                       id="adherer" value="oui" required>
-                <label class="form-check-label" for="adherer">
+                <label style="color: #474747" class="form-check-label" for="adherer">
                     Oui
                 </label> <input class="" type="radio" name="adherer"
                                 id="adherer" value="non" required>
-                <label class="form-check-label" for="adherer">
+                <label style="color: #474747" class="form-check-label" for="adherer">
                     Non
                 </label>
             </p>
@@ -247,19 +253,20 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
             </div>
             <div class="form-group col-md-6">
                 <label for="montant_adh">Montant de l'adhésion :</label>
-                <input type="number" step="10" value="100" min="100" name="montant_adh" id="montant_adh" class="form-control"/>
+                <input type="number" step="10" value="100" min="100" name="montant_adh" id="montant_adh"
+                       class="form-control"/>
             </div>
         </form>
         <div class="col-md-12 passer" style="display: none">
-            <button class="btn btn-primary" type="submit" form="adherer_form">
-                Passer à l'étape suivante
+            <button class="btn btn-warning" type="submit" form="adherer_form">
+                Valider
             </button>
         </div>
     </div>
     <script>
         jQuery(document).ready(function () {
-            jQuery('input#adherer').on('change', function() {
-                if(jQuery("input#adherer:checked").val() === 'oui') {
+            jQuery('input#adherer').on('change', function () {
+                if (jQuery("input#adherer:checked").val() === 'oui') {
                     jQuery('#adherer_form input, #adherer_form select').prop('disabled', false).prop('required', true);
                     jQuery('#adherer_form').fadeIn();
                 } else {
@@ -312,5 +319,5 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
     <?php
     get_footer();
 else:
-    wp_redirect(get_bloginfo('url') . '/?page=connexion&type=parent');
+    wp_redirect(get_bloginfo('url') . '/connexion/');
 endif;

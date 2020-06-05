@@ -15,14 +15,15 @@ function create_client($data)
 {
     if (!check_mail($data['email'])) {
         global $wpdb;
-        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        $pwd = $data['password'];
+        $data['password'] = password_hash($pwd, PASSWORD_DEFAULT);
         $create = $wpdb->insert(
             'uc_clients',
             $data,
             array('%s', '%d')
         );
         if ($create) {
-            return false;
+            wp_redirect(get_bloginfo('url').'/connexion/');
         } else {
             return 'error';
         }
@@ -51,9 +52,6 @@ function connexion($login, $pwd)
     $result = $wpdb->get_row("select * from uc_clients where email='$login'");
     if (password_verify($pwd, $result->password)) {
         $_SESSION['user_id'] = $result->ID;
-        echo 'loggedin';
-    } else {
-        echo '<br />error';
     }
 }
 
@@ -107,7 +105,7 @@ function delete_enfant($id) {
         'uc_enfants',
         array('ID' => $id)
     );
-    wp_redirect(bloginfo('url').'?page=family&type=details#enfants');
+    wp_redirect(bloginfo('url').'/famille/');
 }
 function get_data_by_id($type, $id) {
     global $wpdb;
@@ -128,4 +126,52 @@ function create_adhesion($data) {
         array('%s')
     );
     if($create) wp_redirect(bloginfo('url').'/?page=recap&type=details');
+}
+function create_commande($parent_id) {
+    if(!check_commande($parent_id)) {
+        global $wpdb;
+        $create = $wpdb->insert(
+            'uc_commande',
+            array(
+                'parent_id' => $parent_id,
+            )
+        );
+        $wpdb->print_error();
+        $wpdb->show_errors();
+        if ($create) {
+            $id = $wpdb->insert_id;
+            $numero = str_pad($id, 6, "0", STR_PAD_LEFT);;
+            $update = $wpdb->update(
+                'uc_commande',
+                array('numero' => $numero),
+                array('ID'=> $id),
+                array('%d')
+            );
+            $wpdb->print_error();
+            $wpdb->show_errors();
+            if ($update) wp_redirect(get_bloginfo('url') . '/recap/');
+        }
+    }
+}
+function check_commande($parent_id)
+{
+    global $wpdb;
+    $result = $wpdb->get_var("select count(*) from uc_commande where parent_id='$parent_id'");
+    if ($result > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+function get_recap_data($parent_id) {
+    global $wpdb;
+    $assur1 = $wpdb->get_var("select count(*) from uc_enfants where parent_id='$parent_id' AND type_assur='1'");
+    $assur2 = $wpdb->get_var("select count(*) from uc_enfants where parent_id='$parent_id' AND type_assur='2'");
+    $adhesion = $wpdb->get_var("select montant from uc_adherons where family_id='$parent_id'");
+    $data = array(
+        'assur1' => $assur1,
+        'assur2' => $assur2,
+        'adhesion' => $adhesion
+    );
+    return $data;
 }

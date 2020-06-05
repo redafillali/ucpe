@@ -95,6 +95,7 @@ class PageTemplater
             'pages/inscription.php' => 'Inscription parent',
             'pages/family.php' => 'Page famille',
             'pages/connexion.php' => 'Page connexion',
+            'pages/recap.php' => 'Page recap',
         );
 
     }
