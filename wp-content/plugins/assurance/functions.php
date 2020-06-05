@@ -127,5 +127,5 @@ function create_adhesion($data) {
         $data,
         array('%s')
     );
-    if($create) wp_redirect(bloginfo('url').'/?page=recap&type=details');git
+    if($create) wp_redirect(bloginfo('url').'/?page=recap&type=details');
 }
