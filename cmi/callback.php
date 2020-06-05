@@ -51,7 +51,12 @@ $retrievedHash = $_POST["HASH"];
 */
 if($retrievedHash == $actualHash)	{
     if($_POST["ProcReturnCode"] == "00")	{
-        if(update_commande($_POST['oid'], '3')) echo "ACTION=POSTAUTH";
+        if(update_commande(
+            $_POST['oid'],
+            '3',
+            $_POST['HostRefNum'],
+            $_POST['amount']
+        )) echo "ACTION=POSTAUTH";
     } else {
         echo "APPROVED";
     }

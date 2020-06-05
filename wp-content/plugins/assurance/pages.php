@@ -97,6 +97,7 @@ class PageTemplater
             'pages/connexion.php' => 'Page connexion',
             'pages/recap.php' => 'Page recap',
             'pages/paiement.php' => 'Page Paiement',
+            'admin/index.php' => 'Page admin',
         );
 
     }

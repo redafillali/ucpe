@@ -30,10 +30,11 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
                 'delegue' => $_POST['delegue'],
                 'montant' => $_POST['montant_adh'],
             );
+            $montantCmd = $_POST['montant_enfants'] + $_POST['montant_adh'];
             create_adhesion($data);
-            create_commande($_SESSION['user_id']);
-        } else {
-            create_commande($_SESSION['user_id']);
+            create_commande($_SESSION['user_id'], $montantCmd);
+        } elseif($_POST['adherer'] == 'non') {
+            create_commande($_SESSION['user_id'], $_POST['montant_enfants']);
         }
     endif;
     if ($_GET) :
@@ -256,6 +257,8 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
                 <input type="number" step="10" value="100" min="100" name="montant_adh" id="montant_adh"
                        class="form-control"/>
             </div>
+            <input type="hidden" name="montant_enfants" value="<?php echo $montant_total ?>">
+            <input type="hidden" name="adherer" value="non">
         </form>
         <div class="col-md-12 passer" style="display: none">
             <button class="btn btn-warning" type="submit" form="adherer_form">
@@ -267,10 +270,10 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
         jQuery(document).ready(function () {
             jQuery('input#adherer').on('change', function () {
                 if (jQuery("input#adherer:checked").val() === 'oui') {
-                    jQuery('#adherer_form input, #adherer_form select').prop('disabled', false).prop('required', true);
+                    jQuery('#adherer_form input, #adherer_form select').not("input[type=hidden]").prop('disabled', false).prop('required', true);
                     jQuery('#adherer_form').fadeIn();
                 } else {
-                    jQuery('#adherer_form input, #adherer_form select').prop('required', false).prop('disabled', true);
+                    jQuery('#adherer_form input, #adherer_form select').not("input[type=hidden]").prop('required', false).prop('disabled', true);
                     jQuery('#adherer_form').fadeOut();
                 }
                 jQuery(".passer").fadeIn();

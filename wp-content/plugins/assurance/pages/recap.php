@@ -25,21 +25,21 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
             <tbody>
             <tr>
                 <td>Assurance Globale</td>
-                <td><?php echo get_data_by_id('assurance', '1')->prix ?> DH</td>
+                <td><?php echo get_data_by_id('assurance', '1')->prix ?></td>
                 <td><?php echo $data['assur1'] ?></td>
-                <td><?php echo get_data_by_id('assurance', '1')->prix * $data['assur1'] ?> DH</td>
+                <td><?php echo get_data_by_id('assurance', '1')->prix * $data['assur1'] ?></td>
             </tr>
             <tr>
                 <td>Assurance Globale Plus</td>
-                <td><?php echo get_data_by_id('assurance', '2')->prix ?> DH</td>
+                <td><?php echo get_data_by_id('assurance', '2')->prix ?></td>
                 <td><?php echo $data['assur2'] ?></td>
-                <td><?php echo get_data_by_id('assurance', '2')->prix * $data['assur2'] ?> DH</td>
+                <td><?php echo get_data_by_id('assurance', '2')->prix * $data['assur2'] ?></td>
             </tr>
             <tr>
                 <td>Adhésion</td>
                 <td></td>
                 <td></td>
-                <td><?php echo $data['adhesion'] ?> DH</td>
+                <td><?php echo $data['adhesion'] ?></td>
             </tr>
             </tbody>
             <tfoot style="background-color: #f1f1f1; font-weight: 700;">

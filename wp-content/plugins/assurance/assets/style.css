@@ -9,3 +9,11 @@
 .show {
     display: block !important;
 }
+.admin-sidebar {
+    background: #efefef;
+    padding: 35px 15px;
+}
+.admin-sidebar a {
+    color: black;
+    font-weight: bold;
+}

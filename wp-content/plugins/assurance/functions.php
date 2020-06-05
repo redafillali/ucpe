@@ -126,13 +126,14 @@ function create_adhesion($data) {
         array('%s')
     );
 }
-function create_commande($parent_id) {
+function create_commande($parent_id, $montant) {
     if(!check_commande($parent_id)) {
         global $wpdb;
         $create = $wpdb->insert(
             'uc_commande',
             array(
                 'parent_id' => $parent_id,
+                'montant' => $montant
             )
         );
         if ($create) {
@@ -142,7 +143,7 @@ function create_commande($parent_id) {
                 'uc_commande',
                 array('numero' => $numero),
                 array('ID'=> $id),
-                array('%d')
+                array('%s','%d')
             );
             if ($update) wp_redirect(get_bloginfo('url') . '/recap/');
         }
@@ -153,6 +154,11 @@ function get_commande($parent_id) {
     $commande = $wpdb->get_row("select * from uc_commande where parent_id='$parent_id'");
     return $commande;
 }
+function get_all_commandes() {
+    global $wpdb;
+    return $wpdb->get_results("select * from uc_commande");
+}
+
 function check_commande($parent_id)
 {
     global $wpdb;
@@ -175,13 +181,21 @@ function get_recap_data($parent_id) {
     );
     return $data;
 }
-function update_commande($numero, $etat) {
+function update_commande($numero, $etat, $TransId, $montant) {
     global $wpdb;
-    $update = $wpdb->update(
-        'uc_commande',
-        array('etat' => $etat),
-        array('numero'=> $numero),
-        array('%d')
-    );
-    return $update;
+    $commande = $wpdb->get_row("select * from uc_commande where numero='$numero'");
+    if($commande->montant == $montant) {
+        $update = $wpdb->update(
+            'uc_commande',
+            array(
+                'etat' => $etat,
+                'transaction' => $TransId
+            ),
+            array('numero' => $numero),
+            array('%d',"%s")
+        );
+        return $update;
+    } else {
+        return false;
+    }
 }
