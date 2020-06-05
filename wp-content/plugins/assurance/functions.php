@@ -120,3 +120,12 @@ function get_data_by_id($type, $id) {
     }
     return $result;
 }
+function create_adhesion($data) {
+    global $wpdb;
+    $create = $wpdb->insert(
+        'uc_adherons',
+        $data,
+        array('%s')
+    );
+    if($create) wp_redirect(bloginfo('url').'/?page=recap&type=details');git
+}
