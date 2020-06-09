@@ -2,7 +2,7 @@
  *  Script: chldthmcfg.js
  *  Plugin URI: http://www.childthemeconfigurator.com/
  *  Description: Handles jQuery, AJAX and other UI
- *  Version: 2.5.3
+ *  Version: 2.5.4
  *  Author: Lilaea Media
  *  Author URI: http://www.lilaeamedia.com/
  *  License: GPLv2
@@ -1883,7 +1883,7 @@
                 }
             }
             // retrieve enqueued stylesheet ids 
-            if ( ( queue = body.match( /BEGIN WP QUEUE\n([\s\S]*?)\nEND WP QUEUE/ ) ) ) {
+            if ( ( queue = body.match( /BEGIN WP REGISTERED\n([\s\S]*?)\nEND WP REGISTERED/ ) ) ) {
                 self.analysis[ themetype ].queue = queue[ 1 ].split(/\n/);
                 // console.log( 'QUEUE:' );
                 // console.log( self.analysis[ themetype ].queue );

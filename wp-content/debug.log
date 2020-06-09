@@ -1,0 +1,61 @@
+[09-Jun-2020 10:40:59 UTC] PHP Notice:  Undefined variable: montant_total in /home/equityprft/ucpe/wp-content/plugins/assurance/pages/family.php on line 271
+[09-Jun-2020 10:41:34 UTC] PHP Notice:  Undefined index: adherer in /home/equityprft/ucpe/wp-content/plugins/assurance/pages/family.php on line 44
+[09-Jun-2020 10:41:39 UTC] PHP Warning:  A non-numeric value encountered in /home/equityprft/ucpe/wp-content/plugins/assurance/pages/family.php on line 36
+[09-Jun-2020 10:41:40 UTC] Erreur de la base de données WordPress  pour la requête INSERT INTO `uc_commande` (`parent_id`, `montant`) VALUES ('25', '60') faite par require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/plugins/assurance/pages/family.php'), create_commande
+[09-Jun-2020 10:41:40 UTC] Erreur de la base de données WordPress  pour la requête UPDATE `uc_commande` SET `numero` = '000013' WHERE `ID` = 13 faite par require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/plugins/assurance/pages/family.php'), create_commande
+[09-Jun-2020 10:45:06 UTC] PHP Notice:  Trying to get property 'delegue' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 42
+[09-Jun-2020 10:45:06 UTC] PHP Notice:  Trying to get property 'delegue' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 47
+[09-Jun-2020 10:45:06 UTC] PHP Notice:  Trying to get property 'delegue' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 52
+[09-Jun-2020 10:45:06 UTC] PHP Notice:  Undefined variable: soutien in /home/equityprft/ucpe/bulletin_equity/generate.php on line 164
+[09-Jun-2020 10:45:06 UTC] PHP Notice:  Trying to get property 'nom_pere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 174
+[09-Jun-2020 10:45:06 UTC] PHP Notice:  Trying to get property 'tel_pere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 175
+[09-Jun-2020 10:45:06 UTC] PHP Notice:  Trying to get property 'mail_pere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 176
+[09-Jun-2020 10:45:06 UTC] PHP Notice:  Trying to get property 'nom_mere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 179
+[09-Jun-2020 10:45:06 UTC] PHP Notice:  Trying to get property 'tel_mere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 180
+[09-Jun-2020 10:45:06 UTC] PHP Notice:  Trying to get property 'mail_mere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 181
+[09-Jun-2020 10:45:06 UTC] PHP Notice:  Undefined variable: delegue1 in /home/equityprft/ucpe/bulletin_equity/generate.php on line 204
+[09-Jun-2020 10:45:06 UTC] PHP Notice:  Undefined variable: delegue2 in /home/equityprft/ucpe/bulletin_equity/generate.php on line 205
+[09-Jun-2020 10:45:06 UTC] PHP Notice:  Undefined variable: delegue3 in /home/equityprft/ucpe/bulletin_equity/generate.php on line 206
+[09-Jun-2020 10:45:09 UTC] PHP Notice:  Trying to get property 'delegue' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 42
+[09-Jun-2020 10:45:09 UTC] PHP Notice:  Trying to get property 'delegue' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 47
+[09-Jun-2020 10:45:09 UTC] PHP Notice:  Trying to get property 'delegue' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 52
+[09-Jun-2020 10:45:09 UTC] PHP Notice:  Undefined variable: soutien in /home/equityprft/ucpe/bulletin_equity/generate.php on line 164
+[09-Jun-2020 10:45:09 UTC] PHP Notice:  Trying to get property 'nom_pere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 174
+[09-Jun-2020 10:45:09 UTC] PHP Notice:  Trying to get property 'tel_pere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 175
+[09-Jun-2020 10:45:09 UTC] PHP Notice:  Trying to get property 'mail_pere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 176
+[09-Jun-2020 10:45:09 UTC] PHP Notice:  Trying to get property 'nom_mere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 179
+[09-Jun-2020 10:45:09 UTC] PHP Notice:  Trying to get property 'tel_mere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 180
+[09-Jun-2020 10:45:09 UTC] PHP Notice:  Trying to get property 'mail_mere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 181
+[09-Jun-2020 10:45:09 UTC] PHP Notice:  Undefined variable: delegue1 in /home/equityprft/ucpe/bulletin_equity/generate.php on line 204
+[09-Jun-2020 10:45:09 UTC] PHP Notice:  Undefined variable: delegue2 in /home/equityprft/ucpe/bulletin_equity/generate.php on line 205
+[09-Jun-2020 10:45:09 UTC] PHP Notice:  Undefined variable: delegue3 in /home/equityprft/ucpe/bulletin_equity/generate.php on line 206
+[09-Jun-2020 10:46:25 UTC] PHP Notice:  Trying to get property 'delegue' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 42
+[09-Jun-2020 10:46:25 UTC] PHP Notice:  Trying to get property 'delegue' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 47
+[09-Jun-2020 10:46:25 UTC] PHP Notice:  Trying to get property 'delegue' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 52
+[09-Jun-2020 10:46:25 UTC] PHP Notice:  Undefined variable: soutien in /home/equityprft/ucpe/bulletin_equity/generate.php on line 164
+[09-Jun-2020 10:46:25 UTC] PHP Notice:  Trying to get property 'nom_pere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 174
+[09-Jun-2020 10:46:25 UTC] PHP Notice:  Trying to get property 'tel_pere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 175
+[09-Jun-2020 10:46:25 UTC] PHP Notice:  Trying to get property 'mail_pere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 176
+[09-Jun-2020 10:46:25 UTC] PHP Notice:  Trying to get property 'nom_mere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 179
+[09-Jun-2020 10:46:25 UTC] PHP Notice:  Trying to get property 'tel_mere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 180
+[09-Jun-2020 10:46:25 UTC] PHP Notice:  Trying to get property 'mail_mere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 181
+[09-Jun-2020 10:46:25 UTC] PHP Notice:  Undefined variable: delegue1 in /home/equityprft/ucpe/bulletin_equity/generate.php on line 204
+[09-Jun-2020 10:46:25 UTC] PHP Notice:  Undefined variable: delegue2 in /home/equityprft/ucpe/bulletin_equity/generate.php on line 205
+[09-Jun-2020 10:46:25 UTC] PHP Notice:  Undefined variable: delegue3 in /home/equityprft/ucpe/bulletin_equity/generate.php on line 206
+[09-Jun-2020 10:48:04 UTC] PHP Notice:  Undefined variable: soutien in /home/equityprft/ucpe/bulletin_equity/generate.php on line 170
+[09-Jun-2020 10:48:04 UTC] PHP Notice:  Trying to get property 'nom_pere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 180
+[09-Jun-2020 10:48:04 UTC] PHP Notice:  Trying to get property 'tel_pere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 181
+[09-Jun-2020 10:48:04 UTC] PHP Notice:  Trying to get property 'mail_pere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 182
+[09-Jun-2020 10:48:04 UTC] PHP Notice:  Trying to get property 'nom_mere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 185
+[09-Jun-2020 10:48:04 UTC] PHP Notice:  Trying to get property 'tel_mere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 186
+[09-Jun-2020 10:48:04 UTC] PHP Notice:  Trying to get property 'mail_mere' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 187
+[09-Jun-2020 10:49:27 UTC] PHP Warning:  Creating default object from empty value in /home/equityprft/ucpe/bulletin_equity/generate.php on line 62
+[09-Jun-2020 10:49:27 UTC] PHP Notice:  Undefined variable: soutien in /home/equityprft/ucpe/bulletin_equity/generate.php on line 176
+[09-Jun-2020 10:52:13 UTC] PHP Notice:  Undefined variable: soutien in /home/equityprft/ucpe/bulletin_equity/generate.php on line 182
+[09-Jun-2020 11:02:05 UTC] PHP Notice:  Undefined index: user_id in /home/equityprft/ucpe/bulletin_equity/generate.php on line 19
+[09-Jun-2020 11:02:05 UTC] PHP Notice:  Undefined index: user_id in /home/equityprft/ucpe/bulletin_equity/generate.php on line 25
+[09-Jun-2020 11:02:05 UTC] PHP Notice:  Undefined index: user_id in /home/equityprft/ucpe/bulletin_equity/generate.php on line 26
+[09-Jun-2020 11:02:05 UTC] PHP Notice:  Undefined index: user_id in /home/equityprft/ucpe/bulletin_equity/generate.php on line 27
+[09-Jun-2020 11:02:05 UTC] PHP Notice:  Undefined index: user_id in /home/equityprft/ucpe/bulletin_equity/generate.php on line 28
+[09-Jun-2020 11:02:05 UTC] PHP Notice:  Undefined index: user_id in /home/equityprft/ucpe/bulletin_equity/generate.php on line 31
+[09-Jun-2020 11:02:05 UTC] PHP Notice:  Trying to get property 'email' of non-object in /home/equityprft/ucpe/bulletin_equity/generate.php on line 91

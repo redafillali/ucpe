@@ -13,7 +13,7 @@ if(isset( $_SESSION['user_id'] ) && !empty($_SESSION['user_id'])) :
     else:
     get_header(); ?>
         <form method="post" class="row col-md-6 offset-2">
-            <?php if(isset($error)) : ?>
+            <?php if($error) : ?>
                 <div class="alert alert-danger col-12" role="alert">
                     l'email ou le mot de passe entré est incorrect.
                 </div>

@@ -20,9 +20,11 @@ function create_client($data)
         $create = $wpdb->insert(
             'uc_clients',
             $data,
-            array('%s', '%d')
+            array('%s')
         );
         if ($create) {
+            $_SESSION['user_id'] = $wpdb->insert_id;
+            welcome($data['nom'], $data['email'], $pwd);
             wp_redirect(get_bloginfo('url').'/connexion/');
         } else {
             return 'error';
@@ -50,7 +52,7 @@ function connexion($login, $pwd)
 {
     global $wpdb;
     $result = $wpdb->get_row("select * from uc_clients where email='$login'");
-    if (password_verify($pwd, $result->password)) {
+    if ($result && password_verify($pwd, $result->password)) {
         $_SESSION['user_id'] = $result->ID;
         return false;
     } else {
@@ -129,6 +131,22 @@ function create_adhesion($data) {
         array('%s')
     );
 }
+function update_adhesion($id, $data) {
+    global $wpdb;
+    $update = $wpdb->update(
+        'uc_adherons',
+        $data,
+        array('ID' => $id),
+        array('%s')
+    );
+}
+function delete_adhesion($id) {
+    global $wpdb;
+    $delete = $wpdb->delete(
+        'uc_adherons',
+        array('ID' => $id)
+    );
+}
 function create_commande($parent_id, $montant) {
     if(!check_commande($parent_id)) {
         global $wpdb;
@@ -139,6 +157,9 @@ function create_commande($parent_id, $montant) {
                 'montant' => $montant
             )
         );
+
+        $wpdb->show_errors();
+        $wpdb->print_error();
         if ($create) {
             $id = $wpdb->insert_id;
             $numero = str_pad(intval($id), 6, "0", STR_PAD_LEFT);;
@@ -148,8 +169,12 @@ function create_commande($parent_id, $montant) {
                 array('ID'=> $id),
                 array('%s','%d')
             );
+            $wpdb->show_errors();
+            $wpdb->print_error();
             if ($update) wp_redirect(get_bloginfo('url') . '/recap/');
         }
+    } else {
+        wp_redirect(get_bloginfo('url') . '/recap/');
     }
 }
 function get_commande($parent_id) {
@@ -195,10 +220,104 @@ function update_commande($numero, $etat, $TransId, $montant) {
                 'transaction' => $TransId
             ),
             array('numero' => $numero),
-            array('%d',"%s")
+            array("%s")
         );
+        if($update) {
+            $parent = get_client_by_ID($commande->parent_id);
+            paiement_bulletin($parent->nom, $parent->email);
+        }
         return $update;
     } else {
         return false;
     }
+}
+function pwd_reset_request($user_email) {
+    global $wpdb;
+    if(check_mail($user_email)) {    //Generate a random string.
+        $token = openssl_random_pseudo_bytes(16);
+        //Convert the binary data into hexadecimal representation.
+        $token = bin2hex($token);
+        $request = $wpdb->insert(
+            'uc_reset_pwd',
+            array(
+                'user_email' => $user_email,
+                'token' => $token,
+            ),
+            array('%s')
+        );
+        if($request) {
+            $url = get_bloginfo('url');
+            $message = "<p>Bonjour,</p>
+            <p>Nous avons reçu une demande de réinitialisation de mot de passe pour votre compte. Veuillez confirmer la réinitialisation pour choisir un nouveau mot de passe. Autrement, vous pouvez ignorer cet e-mail.</p>
+            <p><a href='$url/reinitialisation-mot-de-passe/?token=$token&email=$user_email'>$url/reinitialisation-mot-de-passe/?token=$token&email=$user_email</a></p>
+            <p><b>Equipe UCPE,</b></p>";
+            $objet = "Réinitialisation du mot de passe";
+            $headers = array('Content-Type: text/html; charset=UTF-8');
+            $send_mail = wp_mail($user_email, $objet, $message,$headers);
+            return !$send_mail;
+        } else {
+            return true;
+        }
+    } else {
+        return true;
+    }
+}
+function check_token($token, $email) {
+    global $wpdb;
+    $check_token = $wpdb->get_row("select * from uc_reset_pwd where user_email='$email' and token='$token'");
+    if($check_token && $check_token->used == '0') {
+        return true;
+    } else {
+        return false;
+    }
+}
+function reset_pwd($email, $token, $pwd) {
+    $url = get_bloginfo('url');
+    global $wpdb;
+    if(check_mail($email)) {
+        if(check_token($token, $email)) {
+            $edit_pwd = $wpdb->update(
+                'uc_clients',
+                array('password' => password_hash($pwd, PASSWORD_DEFAULT)),
+                array('email' => $email),
+                array("%s")
+            );
+            $wpdb->print_error();
+            $wpdb->show_errors();
+            if($edit_pwd) {
+                $wpdb->update(
+                    'uc_reset_pwd',
+                    array('used' => '1'),
+                    array('token'=> $token),
+                    array('%d', "%s")
+                );
+                $wpdb->print_error();
+                $wpdb->show_errors();
+                $message = "<p>Bonjour,</p>
+                <p>Votre mot de passe UCPE a bien été modifié.</p>
+                <p>Votre Nouveau mot de passe est: <b>$pwd</b></p>
+                <p>Vous pouvez vous connecter à votre espace en suivant le lien : <a href='$url/connexion/'>$url/connexion/</a></p>
+                <p><b>Equipe UCPE,</b></p>";
+                $objet = "votre mot de passe a bien été réinitialisé";
+                $headers = array('Content-Type: text/html; charset=UTF-8');
+                $send_mail = wp_mail($email, $objet, $message,$headers);
+                if($send_mail) bloginfo(get_bloginfo('url').'/connexion/');
+                return !$send_mail;
+            }
+        } else {
+            return true;
+        }
+    } else {
+        return true;
+    }
+}
+function get_adhesion_id($parent_id) {
+    global $wpdb;
+    $adhesion = $wpdb->get_row("select * from uc_adherons where family_id='$parent_id'");
+    return $adhesion;
+}
+function delegue_option($option) {
+    if($option == '1') return 'Participer au Bureau UCPE / Activités UCPE';
+    if($option == '2') return 'Assister au conseil d’école / établissement';
+    if($option == '3') return 'Assister au conseil de classe';
 }

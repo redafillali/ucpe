@@ -1,13 +1,15 @@
 <?php
 session_start();
 if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
-
+    $commande = get_commande($_SESSION['user_id']);
+    if($commande && $commande->etat == '3') wp_redirect(get_bloginfo('url').'/souscription/confirmation/');
     get_header(); ?>
     <div class="row col-md-12">
         <ul id="progressbar">
             <li>Création du compte</li>
             <li>Informations sur les enfants & adhésion</li>
             <li class="active">Confirmation & Paiement</li>
+            <li>Impression du bulletin</li>
         </ul>
     </div>
     <h2>Récapitulatif avant paiement :</h2>
@@ -60,7 +62,10 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
         </table>
     </div>
     <div class="col-md-12">
-        <button class="btn btn-warning" type="submit" form="paiement">
+        <button class="btn btn-warning" type="submit" form="paiement" style="display: inline-block;">
+            <a href="<?php bloginfo('url'); ?>/famille/" style="color: white;">Modifier</a>
+        </button>
+        <button class="btn btn-warning" type="submit" form="paiement" style="display: inline-block;">
             Procéder au paiement
         </button>
         <?php

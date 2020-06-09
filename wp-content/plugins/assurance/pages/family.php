@@ -3,6 +3,9 @@
 // Always start this first
 session_start();
 if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
+    $commande = get_commande($_SESSION['user_id']);
+    $adhesion = get_adhesion_id($_SESSION['user_id']);
+    if($commande && $commande->etat == 3) wp_redirect(get_bloginfo('url').'/confirmation/');
     if ($_POST) :
         if (isset($_POST['nom'])) {
             $data = array(
@@ -18,7 +21,7 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
             );
             create_enfant($data);
         };
-        if (isset($_POST['nom_pere'])) {
+        if (isset($_POST['nom_pere']) && !empty($_POST['nom_pere'])) {
             $data = array(
                 'family_id' => $_SESSION['user_id'],
                 'nom_pere' => $_POST['nom_pere'],
@@ -31,9 +34,15 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
                 'montant' => $_POST['montant_adh'],
             );
             $montantCmd = $_POST['montant_enfants'] + $_POST['montant_adh'];
-            create_adhesion($data);
+            if($adhesion) {
+                if($_POST['adherer'] == 'oui') update_adhesion($adhesion->ID, $data);
+                if($_POST['adherer'] == 'non') delete_adhesion($adhesion->ID);
+            } else {
+                create_adhesion($data);
+            }
             create_commande($_SESSION['user_id'], $montantCmd);
         } elseif($_POST['adherer'] == 'non') {
+            if($adhesion) delete_adhesion($adhesion->ID);
             create_commande($_SESSION['user_id'], $_POST['montant_enfants']);
         }
     endif;
@@ -42,12 +51,14 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
             delete_enfant($_GET['child']);
         }
     endif;
+    $adhesion = get_adhesion_id($_SESSION['user_id']);
     get_header(); ?>
     <div class="row col-md-12">
         <ul id="progressbar">
             <li>Création du compte</li>
             <li class="active">Informations sur les enfants & adhésion</li>
             <li>Confirmation & Paiement</li>
+            <li>Impression du bulletin</li>
         </ul>
     </div>
     <h2>1 - Renseignements concernant le Parent :</h2>
@@ -59,7 +70,10 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
             Nom et prénom du parent : <b><?php echo $parent->nom ?></b>
         </div>
         <div class="col-md-6">
-            Téléphone du parent : <b><?php echo $parent->tel ?></b>
+            Téléphone du père : <b><?php echo $parent->tel ?></b>
+        </div>
+        <div class="col-md-6">
+            Téléphone du mère : <b><?php echo $parent->tel_mere ?></b>
         </div>
         <div class="col-md-12">
             Adresse mail du parent : <b><?php echo $parent->email ?></b>
@@ -157,7 +171,7 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="tel">Date de naissance :</label>
-                                <input id="tel" class="form-control" type="date" name="dateNaissance" required/>
+                                <input id="tel" class="form-control" type="date" name="dateNaissance" min="1990-01-01" max="2020-01-01" required/>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="email">Ville :</label>
@@ -193,10 +207,7 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
                                 </select>
                             </div>
                             <div class="form-group col-md-12">
-                                <button class="form-control btn btn-primary" type="submit">Ajouter</button>
-                            </div>
-                            <div class="form-group col-md-12">
-                                <button class="form-control btn btn-primary" type="submit"></button>
+                                <button class="form-control btn btn-primary" form="enfant" type="submit">Ajouter</button>
                             </div>
                         </form>
                     </div>
@@ -208,59 +219,59 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
     <div class="col-md-12 row">
         <div class="col-md-12">
             <p style="color:#f8b41e; font-weight: 700;">Souhaitez-vous adhérer à l'UCPE <input class="" type="radio" name="adherer"
-                                                      id="adherer" value="oui" required>
+                                                      id="adherer" value="oui" <?php if($adhesion) echo 'checked' ?> required>
                 <label style="color: #474747" class="form-check-label" for="adherer">
                     Oui
                 </label> <input class="" type="radio" name="adherer"
-                                id="adherer" value="non" required>
+                                id="adherer" <?php if(!$adhesion) echo 'checked' ?>  value="non" required>
                 <label style="color: #474747" class="form-check-label" for="adherer">
                     Non
                 </label>
             </p>
         </div>
-        <form class="col-md-12 row" method="post" id="adherer_form" style="display: none;">
+        <form class="col-md-12 row" method="post" id="adherer_form" style="<?php if(!$adhesion) echo 'display:none' ?>">
             <input type="hidden">
             <div class="form-group col-md-4">
                 <label for="nom_pere">Nom du père :</label>
-                <input type="text" name="nom_pere" id="nom_pere" class="form-control"/>
+                <input type="text" name="nom_pere" id="nom_pere" <?php if($adhesion) echo "value='$adhesion->nom_pere'"; ?>" class="form-control"/>
             </div>
             <div class="form-group col-md-4">
                 <label for="tel_pere">Téléphone du père :</label>
-                <input type="text" name="tel_pere" id="tel_pere" class="form-control"/>
+                <input type="text" name="tel_pere" minlength="10" pattern=".{10,10}"   id="tel_pere"<?php if($adhesion) echo "value='$adhesion->tel_pere'"; ?> class="form-control"/>
             </div>
             <div class="form-group col-md-4">
                 <label for="email_pere">Adresse mail du père :</label>
-                <input type="text" name="email_pere" id="email_pere" class="form-control"/>
+                <input type="text" name="email_pere" id="email_pere"<?php if($adhesion) echo "value='$adhesion->mail_pere'"; ?> class="form-control"/>
             </div>
             <div class="form-group col-md-4">
                 <label for="nom_mere">Nom du mère :</label>
-                <input type="text" name="nom_mere" id="nom_mere" class="form-control"/>
+                <input type="text" name="nom_mere"<?php if($adhesion) echo "value='$adhesion->nom_mere'"; ?> id="nom_mere" class="form-control"/>
             </div>
             <div class="form-group col-md-4">
                 <label for="tel_mere">Téléphone du mère :</label>
-                <input type="text" name="tel_mere" id="tel_mere" class="form-control"/>
+                <input type="text" name="tel_mere"<?php if($adhesion) echo "value='$adhesion->tel_mere'"; ?> id="tel_mere" minlength="10" pattern=".{10,10}"  class="form-control"/>
             </div>
             <div class="form-group col-md-4">
                 <label for="email_mere">Adresse mail du mère :</label>
-                <input type="text" name="email_mere" id="email_mere" class="form-control"/>
+                <input type="text" name="email_mere" <?php if($adhesion) echo "value='$adhesion->mail_mere'"; ?> id="email_mere" class="form-control"/>
             </div>
             <div class="form-group col-md-6">
-                <label for="delegue">Parent délégué de la classe de votre enfant :</label>
+                <label for="delegue">Souhaitez-vous être parent délégué de la classe de votre enfant ?</label>
                 <select name="delegue" class="form-control" id="delegue">
                     <option value="">Etes-vous intéréssé?</option>
-                    <option value="oui">Intéressé</option>
-                    <option value="Non">Pas intéressé</option>
+                    <option value="1" <?php if($adhesion && $adhesion->delegue == '1') echo "selected"; ?>>Participer au Bureau UCPE / Activités UCPE</option>
+                    <option value="2" <?php if($adhesion && $adhesion->delegue == '1') echo "selected"; ?>>Assister au conseil d’école / établissement</option>
+                    <option value="3" <?php if($adhesion && $adhesion->delegue == '1') echo "selected"; ?>>Assister au conseil de classe</option>
                 </select>
             </div>
             <div class="form-group col-md-6">
                 <label for="montant_adh">Montant de l'adhésion :</label>
-                <input type="number" step="10" value="100" min="100" name="montant_adh" id="montant_adh"
-                       class="form-control"/>
+                <input type="number" step="10" min="100" name="montant_adh" <?php if($adhesion) echo "value='$adhesion->montant'"; ?>  id="montant_adh"  class="form-control"/>
             </div>
-            <input type="hidden" name="montant_enfants" value="<?php echo $montant_total ?>">
-            <input type="hidden" name="adherer" value="non">
+            <input type="hidden" name="montant_enfants" value="<?php if($montant_total) echo $montant_total ?>">
+            <input type="hidden" id="adherer_hidden" name="adherer" <?php if($adhesion) {echo "value='oui'";} else {echo "value='non'";} ?> >
         </form>
-        <div class="col-md-12 passer" style="display: none">
+        <div class="col-md-12 passer" style="">
             <button class="btn btn-warning" type="submit" form="adherer_form">
                 Valider
             </button>
@@ -272,14 +283,16 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
                 if (jQuery("input#adherer:checked").val() === 'oui') {
                     jQuery('#adherer_form input, #adherer_form select').not("input[type=hidden]").prop('disabled', false).prop('required', true);
                     jQuery('#adherer_form').fadeIn();
+                    jQuery('#adherer_hidden').val('oui');
                 } else {
                     jQuery('#adherer_form input, #adherer_form select').not("input[type=hidden]").prop('required', false).prop('disabled', true);
                     jQuery('#adherer_form').fadeOut();
+                    jQuery('#adherer_hidden').val('non');
                 }
                 jQuery(".passer").fadeIn();
             });
             jQuery('select#ville').on('change', function () {
-                jQuery('select#etablissement').empty().append('<option value="">Choisissez une établissement</option>').prop('disabled', false);
+                jQuery('select#etablissement').empty().append('<option value="">Choisissez une établissement</option>').prop('disabled', true);
                 jQuery.ajax({
                     type: "POST",
                     url: "<?php bloginfo('url');?>/?page=ajax.data",
@@ -292,11 +305,12 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
                             // You will need to alter the below to get the right values from your json object.  Guessing that d.id / d.modelName are columns in your carModels data
                             jQuery('select#etablissement').append('<option value="' + d.ID + '">' + d.etablissement + '</option>');
                         });
+                        jQuery('select#etablissement').prop('disabled', false);
                     }
                 });
             })
             jQuery('select#etablissement').on('change', function () {
-                jQuery('select#classe').empty().append('<option value="">Choisissez un niveau</option>').prop('disabled', false);
+                jQuery('select#classe').empty().append('<option value="">Choisissez un niveau</option>').prop('disabled', true);
                 jQuery.ajax({
                     type: "POST",
                     url: "<?php bloginfo('url');?>/?page=ajax.data",
@@ -310,9 +324,8 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :
                             var niveaux = d.niveaux.split(',');
                             jQuery.each(niveaux, function (index, value) {
                                 jQuery('select#classe').append('<option value="' + value + '">' + value + '</option>');
-                            })
-
-
+                            });
+                            jQuery('select#classe').prop('disabled', false);
                         });
                     }
                 });

@@ -8,3 +8,4 @@ Version: 0.0.01
 */
 require ('functions.php');
 require ('pages.php');
+require ('mails.php');

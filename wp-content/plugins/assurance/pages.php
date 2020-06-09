@@ -98,7 +98,8 @@ class PageTemplater
             'pages/recap.php' => 'Page recap',
             'pages/paiement.php' => 'Page Paiement',
             'admin/index.php' => 'Page admin',
-            'pages/forgotten.php' => 'Page récupération'
+            'pages/forgotten.php' => 'Page récupération',
+            'pages/confirmation.php' => 'Page conformation'
         );
 
     }
